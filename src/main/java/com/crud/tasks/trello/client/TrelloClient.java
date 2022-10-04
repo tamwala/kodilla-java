@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TrelloClient {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
     private final RestTemplate restTemplate;
     private final TrelloConfig trelloConfig;
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
 
 
     public List<TrelloBoardDto> getTrelloBoards() {
@@ -46,8 +46,8 @@ public class TrelloClient {
                     .map(Arrays::asList)
                     .orElse(Collections.emptyList());
             response.stream()
-                    .filter(f -> !f.getName().isEmpty() && !f.getId().isEmpty())
-                    .filter(f -> f.getName().toLowerCase().contains("kodilla"))
+                    .filter(board -> !board.getName().isEmpty() && !board.getId().isEmpty())
+                    .filter(board -> board.getName().toLowerCase().contains("kodilla"))
                     .collect(Collectors.toList());
             return response;
 
