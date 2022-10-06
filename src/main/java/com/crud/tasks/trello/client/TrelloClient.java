@@ -35,7 +35,8 @@ public class TrelloClient {
                 .queryParam("token", trelloConfig.getTrelloToken())
                 .queryParam("fields", "name,id")
                 .queryParam("lists", "all")
-                .queryParam("badges", "all")
+                .queryParam("list_fields", "id,name,closed")
+//                .queryParam("badges", "all")
                 .build()
                 .encode()
                 .toUri();
@@ -47,7 +48,7 @@ public class TrelloClient {
                     .orElse(Collections.emptyList());
             response.stream()
                     .filter(board -> !board.getName().isEmpty() && !board.getId().isEmpty())
-                    .filter(board -> board.getName().toLowerCase().contains("kodilla"))
+//                    .filter(board -> board.getName().toLowerCase().contains("kodilla"))
                     .collect(Collectors.toList());
             return response;
 
