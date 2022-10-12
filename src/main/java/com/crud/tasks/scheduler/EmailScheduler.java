@@ -11,12 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class EmailScheduler {
-
     private static final String SUBJECT = "Tasks: Once a day email";
     private final SimpleEmailService simpleEmailService;
     private final TaskRepository taskRepository;
     private final AdminConfig adminConfig;
-    private EmailScheduler emailScheduler;
 
     @Scheduled(fixedDelay = 10000)
     public void sendInformationEmail() {
@@ -25,17 +23,13 @@ public class EmailScheduler {
                 new Mail(
                         adminConfig.getAdminMail(),
                         SUBJECT,
-                        "Currently in database you got: " + size +  emailScheduler.countTasks(size),
+                        "Currently in database you got: " + size + countTasks(size),
                         null
                 )
         );
     }
 
     public String countTasks (long size) {
-        if (size > 0) {
-            return "tasks";
-        } else {
-            return "task";
-        }
+        return size > 1 ? " tasks" : " task";
     }
 }
