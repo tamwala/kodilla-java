@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +23,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringJUnitWebConfig
 @WebMvcTest(TaskController.class)
 public class TaskControllerTest {
 
@@ -43,9 +44,9 @@ public class TaskControllerTest {
         when(taskMapper.mapToTaskDtoList(service.getAllTasks())).thenReturn(taskListDto);
 
         //When & Then
-        mockMvc.perform(get("/v1/tasks").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/tasks").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(0)));
     }
 
     @Test
@@ -60,12 +61,12 @@ public class TaskControllerTest {
         when(taskMapper.mapToTaskDtoList(service.getAllTasks())).thenReturn(taskListDto);
 
         //When & Then
-        mockMvc.perform(get("/v1/tasks").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].title", is("Test Task")))
-                .andExpect(jsonPath("$[0].content", is("Test Content")));
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/tasks").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", is("Test Task")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].content", is("Test Content")));
     }
 
     @Test
@@ -86,19 +87,19 @@ public class TaskControllerTest {
         when(taskMapper.mapToTaskDto(ArgumentMatchers.any(Task.class))).thenReturn(taskDto);
 
         //When & Then
-        mockMvc.perform(get("/v1/tasks/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/tasks/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("taskId", "1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("Test Task")))
-                .andExpect(jsonPath("$.content", is("Test Content")));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", is("Test Task")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content", is("Test Content")));
     }
 
     @Test
     public void shouldDeleteTaskById() throws Exception {
-        mockMvc.perform(delete("/v1/tasks/?taskId=1"))
-                .andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/tasks/?taskId=1"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -114,14 +115,14 @@ public class TaskControllerTest {
         String jsonContent = gson.toJson(taskDto);
 
         //When & Then
-        mockMvc.perform(put("/v1/tasks")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(jsonContent))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("Updated Task")))
-                .andExpect(jsonPath("$.content", is("Updated Content")));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", is("Updated Task")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content", is("Updated Content")));
     }
 
     @Test
@@ -136,10 +137,10 @@ public class TaskControllerTest {
         String jsonContent = gson.toJson(taskDto);
 
         //When & Then
-        mockMvc.perform(post("/v1/tasks")
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(jsonContent))
-                .andExpect(status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
