@@ -1,8 +1,7 @@
-package com.crud.tasks.trello.service;
+package com.crud.tasks.service;
 
 import com.crud.tasks.domain.Mail;
 import com.crud.tasks.service.SimpleEmailService;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class TrelloServiceTest {
+public class SimpleEmailServiceTest {
 
     @InjectMocks
     private SimpleEmailService simpleEmailService;
@@ -24,10 +23,14 @@ public class TrelloServiceTest {
     private JavaMailSender javaMailSender;
 
     @Test
-    @Ignore
     public void shouldSendMail(){
         //Given
-        Mail mail = new Mail("test@test.com", "cc@test.com","Test", "Test message");
+        Mail mail = Mail.builder()
+                .mailTo("test@test.com")
+                .subject("cc@test.com")
+                .message("Test")
+                .toCc("Test message")
+                .build();
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
@@ -43,16 +46,18 @@ public class TrelloServiceTest {
     }
 
     @Test
-    @Ignore
     public void shouldSendMailWithoutCc() {
         //Given
-        Mail mail = new Mail("test@test.com", "Test message","Test", "");
+        Mail mail = Mail.builder()
+                .mailTo("test@test.com")
+                .subject("Test message")
+                .message("Test")
+                .build();
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
-        mailMessage.setCc(mail.getToCc());
 
         //When
         simpleEmailService.send(mail);
@@ -62,10 +67,14 @@ public class TrelloServiceTest {
     }
 
     @Test
-    @Ignore
     public void createTrelloCardTest() {
         //Given
-        Mail mail = new Mail("test@test.com", "Test message","Test", "test1@test.com");
+        Mail mail = Mail.builder()
+                .mailTo("test@test.com")
+                .subject("Test message")
+                .message("Test")
+                .toCc("test1@test.com")
+                .build();
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
@@ -79,5 +88,4 @@ public class TrelloServiceTest {
         //Then
         verify(javaMailSender, times(1)).send(mailMessage);
     }
-
 }
