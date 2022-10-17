@@ -1,6 +1,6 @@
 package com.crud.tasks.trello.client;
 
-import com.crud.tasks.domain.CreatedTrelloCard;
+import com.crud.tasks.domain.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.trello.config.TrelloConfig;
@@ -43,7 +43,7 @@ class TrelloClientTest {
         TrelloBoardDto[] trelloBoards = new TrelloBoardDto[1];
         trelloBoards[0] = new TrelloBoardDto("Kodilla", "test_id", new ArrayList<>());
 
-        URI uri = new URI("http://test.com/members/test/boards?key=test&token=test&fields=name,id&lists=all&badges=all");
+        URI uri = new URI("http://test.com/members/test/boards?key=test&token=test&fields=name,id&lists=all&list_fields=id,name,closed");
 
         when(restTemplate.getForObject(uri, TrelloBoardDto[].class)).thenReturn(trelloBoards);
 
@@ -72,15 +72,15 @@ class TrelloClientTest {
         );
         URI uri = new URI("http://test.com/cards?key=test&token=test&name=Test%20task&desc=Test%20Description&pos=top&idList=test_id");
 
-        CreatedTrelloCard createdTrelloCard = new CreatedTrelloCard(
+        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto(
                 "1",
                 "test task",
                 "http://test.com"
         );
-        when(restTemplate.postForObject(uri, null, CreatedTrelloCard.class)).thenReturn(createdTrelloCard);
+        when(restTemplate.postForObject(uri, null, CreatedTrelloCardDto.class)).thenReturn(createdTrelloCardDto);
 
         // When
-        CreatedTrelloCard newCard = trelloClient.createNewCard(trelloCardDto);
+        CreatedTrelloCardDto newCard = trelloClient.createNewCard(trelloCardDto);
 
         // Then
         assertEquals("1", newCard.getId());
@@ -97,7 +97,7 @@ class TrelloClientTest {
         when(trelloConfig.getTrelloToken()).thenReturn("test");
         when(trelloConfig.getTrelloUser()).thenReturn("test");
 
-        URI uri = new URI("http://test.com/members/test/boards?key=test&token=test&fields=name,id&lists=all&badges=all");
+        URI uri = new URI("http://test.com/members/test/boards?key=test&token=test&fields=name,id&lists=all&list_fields=id,name,closed");
 
         when(restTemplate.getForObject(uri, TrelloBoardDto[].class)).thenReturn(null);
 
