@@ -37,6 +37,8 @@ public class TaskControllerTest {
     @MockBean
     private TaskMapper taskMapper;
 
+    private Gson gson = new Gson();
+
     @Test
     public void shouldFetchEmptyTaskList() throws Exception {
         //Given
@@ -111,7 +113,6 @@ public class TaskControllerTest {
                 "Updated Content"
         );
         when(taskMapper.mapToTaskDto(service.saveTask(taskMapper.mapToTask(taskDto)))).thenReturn(taskDto);
-        Gson gson = new Gson();
         String jsonContent = gson.toJson(taskDto);
 
         //When & Then
@@ -133,7 +134,6 @@ public class TaskControllerTest {
                 "Created Task",
                 "Created Content"
         );
-        Gson gson = new Gson();
         String jsonContent = gson.toJson(taskDto);
 
         //When & Then

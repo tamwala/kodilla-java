@@ -34,6 +34,8 @@ public class TrelloControllerTest {
     @MockBean
     private TrelloFacade trelloFacade;
 
+    private Gson gson = new Gson();
+
     @Test
     public void shouldFetchEmptyTrelloBoards() throws Exception {
         //Given
@@ -84,7 +86,6 @@ public class TrelloControllerTest {
                 "http://test.com");
 
         when(trelloFacade.createCard(ArgumentMatchers.any(TrelloCardDto.class))).thenReturn(createdTrelloCardDto);
-        Gson gson = new Gson();
         String jsonContent = gson.toJson(trelloCardDto);
 
         //When & Then
