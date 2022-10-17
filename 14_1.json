@@ -1,0 +1,27 @@
+{
+  "carName" : "A5",
+  "carBrand" : "Audi",
+  "carEngine" : 2500,
+  "carSeat":[
+    {
+      "id": 1,
+      "material": "leather",
+      "color": "black"
+    },
+    {
+      "id": 2,
+      "material": "silk",
+      "color": "green"
+    },
+    {
+      "id": 3,
+      "material": "leather",
+      "color": "yellow"
+    },
+    {
+      "id": 4,
+      "material": "suede",
+      "color": "grey"
+    }
+  ]
+}
